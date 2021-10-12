@@ -78,6 +78,7 @@ class Fudo {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		add_action( 'plugins_loaded', array( $this, 'define_integration' ) );
 
 	}
 
@@ -156,6 +157,23 @@ class Fudo {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+	}
+
+	/**
+	 * Register all of the hooks related to the integration functionality
+	 * of the plugin.
+	 *
+	 * @since    0.0.1
+	 * @access   private
+	 */
+	public function define_integration() {
+
+		if ( class_exists( 'WC_Integration' ) ){
+			require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fudo-integration.php';
+			$plugin_integration = new Fudo_Integration();
+			add_filter( 'woocommerce_integrations', array( $plugin_integration, 'add_integration' ), 10, 1 );
+		}
 
 	}
 
