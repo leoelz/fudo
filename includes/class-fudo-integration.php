@@ -21,6 +21,8 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 			// Define user set variables.
 			$this->fudo_client_id     = $this->get_option( 'fudo_client_id' );
 			$this->fudo_client_secret = $this->get_option( 'fudo_client_secret' );
+			$this->fudo_login     = $this->get_option( 'fudo_login' );
+			$this->fudo_password = $this->get_option( 'fudo_password' );
 			// Actions.
 			add_action( 'woocommerce_update_options_integration_' .  $this->id, array( $this, 'process_admin_options' ) );
 		}
@@ -32,13 +34,25 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 				'fudo_client_id' => array(
 					'title'             => __( 'Client Id', 'woocommerce-fudo-integration' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with your Client Id. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-integration-demo' ),
+					'description'       => __( 'Enter with the Fudo Client Id. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
 				),
 				'fudo_client_secret' => array(
 					'title'             => __( 'Client Secret', 'woocommerce-fudo-integration' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with your Client Secret. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-integration-demo' ),
+					'description'       => __( 'Enter with the Fudo Client Secret. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-fudo-integration' ),
+					'desc_tip'          => true
+				),
+				'fudo_login' => array(
+					'title'             => __( 'User', 'woocommerce-fudo-integration' ),
+					'type'              => 'text',
+					'description'       => __( 'Enter with the Fudo User. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
+					'desc_tip'          => true
+				),
+				'fudo_password' => array(
+					'title'             => __( 'Password', 'woocommerce-fudo-integration' ),
+					'type'              => 'text',
+					'description'       => __( 'Enter with the Fudo Password. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
 				),
 			);

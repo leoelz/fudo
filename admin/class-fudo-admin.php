@@ -27,9 +27,9 @@ class Fudo_Admin {
 	 *
 	 * @since    0.0.1
 	 * @access   private
-	 * @var      string    $fudo    The ID of this plugin.
+	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
-	private $fudo;
+	private $plugin_name;
 
 	/**
 	 * The version of this plugin.
@@ -49,7 +49,7 @@ class Fudo_Admin {
 	 */
 	public function __construct( $fudo, $version ) {
 
-		$this->fudo = $fudo;
+		$this->plugin_name = $fudo;
 		$this->version = $version;
 
 	}
@@ -73,7 +73,7 @@ class Fudo_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->fudo, plugin_dir_url( __FILE__ ) . 'css/fudo-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fudo-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -96,8 +96,23 @@ class Fudo_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->fudo, plugin_dir_url( __FILE__ ) . 'js/fudo-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fudo-admin.js', array( 'jquery' ), $this->version, false );
 
+	}
+
+	public function add_admin_page() {
+		add_submenu_page(
+			'edit.php?post_type=product',
+			'Integración con Fudo',
+			'Fudo',
+			'manage_options',
+			$this->plugin_name,
+			array( $this, 'load_admin_page_content' )
+		);
+	}
+	// Load the plugin admin page partial.
+	public function load_admin_page_content() {
+		require_once plugin_dir_path( __FILE__ ). 'partials/fudo-admin-display.php';
 	}
 
 }

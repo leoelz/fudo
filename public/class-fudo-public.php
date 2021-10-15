@@ -49,7 +49,7 @@ class Fudo_Public {
 	 */
 	public function __construct( $fudo, $version ) {
 
-		$this->fudo = $fudo;
+		$this->plugin_name = $fudo;
 		$this->version = $version;
 
 	}
@@ -73,7 +73,7 @@ class Fudo_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->fudo, plugin_dir_url( __FILE__ ) . 'css/fudo-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/fudo-public.css', array(), $this->version, 'all' );
 
 	}
 
@@ -96,7 +96,7 @@ class Fudo_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->fudo, plugin_dir_url( __FILE__ ) . 'js/fudo-public.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/fudo-public.js', array( 'jquery' ), $this->version, false );
 
 	}
 

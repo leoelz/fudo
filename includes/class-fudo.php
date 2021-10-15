@@ -72,7 +72,7 @@ class Fudo {
 		} else {
 			$this->version = '0.0.1';
 		}
-		$this->fudo = 'fudo';
+		$this->plugin_name = 'fudo';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -123,6 +123,11 @@ class Fudo {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-fudo-public.php';
 
+		/**
+		 * The class responsible for defining api client functionality of the plugin
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fudo-client.php';
+
 		$this->loader = new Fudo_Loader();
 
 	}
@@ -153,10 +158,13 @@ class Fudo {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Fudo_Admin( $this->get_fudo(), $this->get_version() );
+		$plugin_admin = new Fudo_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+		// Hooks into admin_menu hook to add custom page
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_page' );
 
 	}
 
@@ -186,7 +194,7 @@ class Fudo {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Fudo_Public( $this->get_fudo(), $this->get_version() );
+		$plugin_public = new Fudo_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
@@ -209,8 +217,8 @@ class Fudo {
 	 * @since     0.0.1
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_fudo() {
-		return $this->fudo;
+	public function get_plugin_name() {
+		return $this->plugin_name;
 	}
 
 	/**
