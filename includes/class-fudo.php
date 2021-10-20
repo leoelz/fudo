@@ -79,7 +79,8 @@ class Fudo {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		add_action( 'plugins_loaded', array( $this, 'define_integration' ) );
-
+		add_action( 'init', [$this, 'schedule_fudo_product_importation'] );
+		add_action( 'fudo_products_importation', [$this, 'import_fudo_products'] );
 	}
 
 	/**
@@ -133,6 +134,8 @@ class Fudo {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fudo-importer.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . '../woocommerce/packages/action-scheduler/action-scheduler.php';
+
 		$this->loader = new Fudo_Loader();
 
 	}
@@ -163,13 +166,13 @@ class Fudo {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Fudo_Admin( $this->get_plugin_name(), $this->get_version() );
+		/*$plugin_admin = new Fudo_Admin( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
 		// Hooks into admin_menu hook to add custom page
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_page' );
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_page' );*/
 
 	}
 
@@ -244,6 +247,23 @@ class Fudo {
 	 */
 	public function get_version() {
 		return $this->version;
+	}
+
+	/**
+	 * A callback to run when the 'fudo_products_importation' scheduled action is run.
+	 */
+	private function import_fudo_products() {
+		error_log( 'It is just after midnight on ' . date( 'Y-m-d' ) );
+	}
+
+	/**
+	 * Schedule an action with the hook 'fudo_products_importation' to run at midnight each day
+	 * so that our callback is run then.
+	 */
+	public function schedule_fudo_product_importation() {
+		if ( false === as_has_scheduled_action( 'fudo_products_importation' ) ) {
+			as_schedule_recurring_action( strtotime( 'now' ), HOUR_IN_SECONDS, 'fudo_products_importation' );
+		}
 	}
 
 }
