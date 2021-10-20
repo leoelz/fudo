@@ -128,6 +128,11 @@ class Fudo {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-fudo-client.php';
 
+		/**
+		 * The class responsible for defining products importer functionality of the plugin
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-fudo-importer.php';
+
 		$this->loader = new Fudo_Loader();
 
 	}

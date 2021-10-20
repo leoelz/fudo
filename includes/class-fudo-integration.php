@@ -23,6 +23,8 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 			$this->fudo_client_secret = $this->get_option( 'fudo_client_secret' );
 			$this->fudo_login     = $this->get_option( 'fudo_login' );
 			$this->fudo_password = $this->get_option( 'fudo_password' );
+			$this->fudo_use_api     = $this->get_option( 'fudo_use_api' , true );
+			$this->fudo_use_staging = $this->get_option( 'fudo_use_staging', false );
 			// Actions.
 			add_action( 'woocommerce_update_options_integration_' .  $this->id, array( $this, 'process_admin_options' ) );
 		}
@@ -46,15 +48,27 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 				'fudo_login' => array(
 					'title'             => __( 'User', 'woocommerce-fudo-integration' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with the Fudo User. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'If you don\'t have access to API. Enter the Fudo User. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
 				),
 				'fudo_password' => array(
 					'title'             => __( 'Password', 'woocommerce-fudo-integration' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with the Fudo Password. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'If you don\'t have access to API. Enter the Fudo Password. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
 				),
+				'fudo_use_api' => array(
+					'title'             => __( 'Use API', 'woocommerce-fudo-integration' ),
+					'type'              => 'checkbox',
+					'description'       => __( 'Disable if you have no access to API yet', 'woocommerce-fudo-integration' ),
+					'desc_tip'          => true
+				),
+				'fudo_use_staging' => array(
+					'title'             => __( 'Use Staging', 'woocommerce-fudo-integration' ),
+					'type'              => 'checkbox',
+					'description'       => __( 'Only if you have access to API', 'woocommerce-fudo-integration' ),
+					'desc_tip'          => true
+				)
 			);
 		}
 		public function add_integration( $integrations ) {

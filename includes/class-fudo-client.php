@@ -4,14 +4,16 @@ class Fudo_Client
 	private $access_token = null;
 	private $use_api = false;
 	private $use_staging = false;
+	private $plugin_integration;
 
-	public function __construct($use_api = false, $use_staging = false){
-		$this->use_api = $use_api;
-		$this->use_staging = $use_staging;
+	public function __construct(){
+		$this->plugin_integration = new Fudo_Integration();
+		$this->use_api = $this->plugin_integration->get_option( 'fudo_use_api' ) === "yes";
+		$this->use_staging = $this->use_api && $this->plugin_integration->get_option( 'fudo_use_staging' ) === "yes";
 	}
 
 	private function fetch($uri, $body = null){
-		$cache_size = 2048;
+		$cache_size = 4096;
 		$host = $this->use_staging ? "api-staging.fu.do" : "api.fu.do";
 		$url = $this->use_api ? "/v1alpha1" : "";
 		if ($fp = fsockopen("ssl://".$host,443, $errno, $errstr)) {
@@ -63,17 +65,15 @@ class Fudo_Client
 				}
 				fclose($fp);
 				return $response;
-			}
+			}else return json_encode(['error'=>$line]);
 		}
 	}
 
 	private function get_access_token(){
-		$plugin_integration = new Fudo_Integration();
-		$fudo_client_id = $plugin_integration->get_option( 'fudo_client_id' );
-		$fudo_client_secret = $plugin_integration->get_option( 'fudo_client_secret' );
-		$fudo_login = $plugin_integration->get_option( 'fudo_login' );
-		$fudo_password = $plugin_integration->get_option( 'fudo_password' );
-
+		$fudo_client_id = $this->plugin_integration->get_option( 'fudo_client_id' );
+		$fudo_client_secret = $this->plugin_integration->get_option( 'fudo_client_secret' );
+		$fudo_login = $this->plugin_integration->get_option( 'fudo_login' );
+		$fudo_password = $this->plugin_integration->get_option( 'fudo_password' );
 
 		$body = $this->use_api
 				? json_encode(["clientId"=>$fudo_client_id,"clientSecret"=>$fudo_client_secret])
@@ -82,19 +82,24 @@ class Fudo_Client
 		$response = $this->fetch($this->use_api ? "/auth" : "/authenticate", $body);
 
 		$response = json_decode($response);
-		if (property_exists($response, 'token'))
-			return $this->access_token = $response->token;
+		if (is_object($response))
+			if(property_exists($response, 'token'))
+				return $this->access_token = $response->token;
+			else if(property_exists($response,'error')) {
+				echo ($response->error);
+				return false;
+			}
 	}
 
 	public function get_products(){
 		if($this->access_token === null)
-			$this->get_access_token();
+			if(!$this->get_access_token())return "";
 		return $this->fetch("/products?a=-1");
 	}
 
 	public function get_categories(){
 		if($this->access_token === null)
-			$this->get_access_token();
+			if(!$this->get_access_token())return "";
 		return $this->fetch("/product_categories");
 	}
 }

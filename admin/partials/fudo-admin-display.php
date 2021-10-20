@@ -70,6 +70,9 @@
       <ul>
         <li>Listado de productos</li>
         <li><?php
+          $fudoImporter = new Fudo_Importer();
+          echo json_encode($fudoImporter->import());
+
 				$fudoClient = new Fudo_Client(false, false);
 				$products = $fudoClient->get_products();
 				?>
