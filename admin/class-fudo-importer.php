@@ -85,10 +85,6 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 				$total  = count( $_terms );
 
 				foreach ( $_terms as $index => $_term ) {
-					// Don't allow users without capabilities to create new categories.
-					if ( ! current_user_can( 'manage_product_terms' ) ) {
-						break;
-					}
 
 					$term = wp_insert_term( $_term, 'product_cat', array( 'parent' => intval( $parent ) ) );
 
@@ -117,7 +113,7 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 			return $categories;
 		}
 
-		protected function get_category_name($categories, $category_id){
+		public function get_category_name($categories, $category_id){
 			if($categories[$category_id]["parentId"] != "") {
 				return $this->get_category_name($categories, $categories[$category_id]["parentId"])." > ".$categories[$category_id]["name"];
 			}
@@ -190,7 +186,6 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 				$product_data["meta_data"]=[["key"=>"fudo_id","value"=>$fudo_product_id]];
 
 				do_action( 'woocommerce_product_import_before_import', $product_data );
-
 				$id = $this->wc_get_product_id_by_fudo_id($fudo_product_id);
 				if ( $id ) {
 					$product_data["id"]=$id;

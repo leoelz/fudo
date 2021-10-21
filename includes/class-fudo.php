@@ -252,8 +252,9 @@ class Fudo {
 	/**
 	 * A callback to run when the 'fudo_products_importation' scheduled action is run.
 	 */
-	private function import_fudo_products() {
-		error_log( 'It is just after midnight on ' . date( 'Y-m-d' ) );
+	public function import_fudo_products() {
+		$fudoImporter = new Fudo_Importer();
+		error_log(json_encode($fudoImporter->import()));
 	}
 
 	/**
@@ -262,7 +263,7 @@ class Fudo {
 	 */
 	public function schedule_fudo_product_importation() {
 		if ( false === as_has_scheduled_action( 'fudo_products_importation' ) ) {
-			as_schedule_recurring_action( strtotime( 'now' ), HOUR_IN_SECONDS, 'fudo_products_importation' );
+			as_schedule_recurring_action( strtotime( 'now' )-gmdate('i',strtotime('now'))*60-gmdate('s',strtotime('now'))+60*60, 5*60, 'fudo_products_importation' );
 		}
 	}
 
