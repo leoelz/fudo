@@ -25,6 +25,7 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 			$this->fudo_password = $this->get_option( 'fudo_password' );
 			$this->fudo_use_api     = $this->get_option( 'fudo_use_api' , true );
 			$this->fudo_use_staging = $this->get_option( 'fudo_use_staging', false );
+			$this->fudo_import_interval_minutes = $this->get_option( 'fudo_import_interval_minutes', false );
 			// Actions.
 			add_action( 'woocommerce_update_options_integration_' .  $this->id, array( $this, 'process_admin_options' ) );
 		}
@@ -68,12 +69,25 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 					'type'              => 'checkbox',
 					'description'       => __( 'Only if you have access to API', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
+				),
+					'fudo_import_interval_minutes' => array(
+					'title'             => __( 'Import Interval', 'woocommerce-fudo-integration' ),
+					'type'              => 'text',
+					'description'       => __( 'Minutes interval to run the product importation from fudo', 'woocommerce-fudo-integration' ),
+					'desc_tip'          => true
 				)
 			);
 		}
 		public function add_integration( $integrations ) {
 			$integrations[] = 'Fudo_Integration';
 			return $integrations;
+		}
+
+		public function process_admin_options() {
+			parent::process_admin_options();
+			if ( false !== as_has_scheduled_action( 'fudo_products_importation' ) ) {
+				as_unschedule_action('fudo_products_importation');
+			}
 		}
 	}
 endif;

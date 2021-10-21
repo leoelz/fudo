@@ -262,8 +262,10 @@ class Fudo {
 	 * so that our callback is run then.
 	 */
 	public function schedule_fudo_product_importation() {
+		$plugin_integration = new Fudo_Integration();
+		$importation_minutes_interval = intval($plugin_integration->get_option( 'fudo_import_interval_minutes' ));
 		if ( false === as_has_scheduled_action( 'fudo_products_importation' ) ) {
-			as_schedule_recurring_action( strtotime( 'now' )-gmdate('i',strtotime('now'))*60-gmdate('s',strtotime('now'))+60*60, 5*60, 'fudo_products_importation' );
+			as_schedule_recurring_action( strtotime( 'now' ), $importation_minutes_interval*60, 'fudo_products_importation' );
 		}
 	}
 
