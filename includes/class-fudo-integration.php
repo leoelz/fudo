@@ -71,9 +71,9 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 					'desc_tip'          => true
 				),
 					'fudo_import_interval_minutes' => array(
-					'title'             => __( 'Import Interval', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Import Interval Minutes', 'woocommerce-fudo-integration' ),
 					'type'              => 'text',
-					'description'       => __( 'Minutes interval to run the product importation from fudo', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Interval minutes to run the product importation from Fudo', 'woocommerce-fudo-integration' ),
 					'desc_tip'          => true
 				)
 			);

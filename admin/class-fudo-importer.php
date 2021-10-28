@@ -164,6 +164,7 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 
 			$categories = json_decode($this->api->get_categories(), true);
 			$products = json_decode($this->api->get_products(), true);
+			$stock = json_decode($this->api->get_stock(), true);
 
 			foreach($products as $fudo_product_id => $product_data2){
 				$product_data=[];//['id'=>'','sku'=>'','name'=>'','slug'=>'','date_created'=>'','date_modified'=>'','status'=>'','featured'=>'','catalog_visibility'=>'','description'=>'','short_description'=>'' ,'sku'=>'','price'=>'','regular_price'=>'','sale_price'=>'','date_on_sale_from'=>'','date_on_sale_to'=>'','total_sales'=>'','tax_status'=>'','tax_class'=>'','manage_stock'=>'','stock_quantity'=>'','stock_status'=>'','backorders'=>'','low_stock_amount'=>'','sold_individually'=>'','weight'=>'','length'=>'','width'=>'','height'=>'','upsell_ids'=>'', 'cross_sell_ids'=>'','parent_id'=>'','reviews_allowed'=>'','purchase_note'=>'','attributes'=>'','default_attributes'=>'','menu_order'=>'','post_password'=>'','virtual'=>'','downloadable'=>'','category_ids'=>'','tag_ids'=>'','shipping_class_id'=>'','downloads'=>'','image_id'=>'','gallery_image_ids'=>'','download_limit'=>'','download_expiry'=>'','rating_counts'=>'','average_rating'=>'','review_count'=>''];
@@ -173,15 +174,12 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 				$product_data["name"]=$product_data2["name"];
 				$product_data["regular_price"]=$product_data2["price"];
 				$product_data["featured"]=$product_data2["favourite"];
-				$product_data["catalog_visibility"]=$product_data2["active"]?"visible":"hidden";//"enableOnlineMenu","enableQrMenu"
 				$product_data["low_stock_amount"]=$product_data2["minStock"];
 				$product_data["manage_stock"]=$product_data2["stockControl"];
-				$product_data["stock_quantity"]=$product_data2["stock"];
-				$product_data["description"]=$product_data2["description"];
-				$product_data["short_description"]=$product_data2["description"];
+				$product_data["stock_quantity"]=$stock[$fudo_product_id]["stock"]==null?$stock[$fudo_product_id]["availability"]:$stock[$fudo_product_id]["stock"];
 				$product_data["cross_sell_ids"]=$this->parse_combo_group($product_data2["comboGroups"]);
 				$product_data["type"]=count($product_data["cross_sell_ids"])>0?"grouped":"simple";
-				$product_data["stock_status"] = $product_data2["stock"] > 0;
+				$product_data["stock_status"] = ($stock[$fudo_product_id]["stock"]==null?$stock[$fudo_product_id]["availability"]:$stock[$fudo_product_id]["stock"]) > 0;
 				$product_data["category_ids"]=$this->parse_categories_field($category);
 				$product_data["meta_data"]=[["key"=>"fudo_id","value"=>$fudo_product_id]];
 
@@ -190,11 +188,13 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 				if ( $id ) {
 					$product_data["id"]=$id;
 					$product   = wc_get_product( $id );
-					$id_exists = $product && 'importing' !== $product->get_status();
-					if ( $update_existing && ( isset( $product_data['id'] ) || isset( $product_data['sku'] ) ) && ! $id_exists) {
-						$product_data["description"]=$product->get_description('db');
-						$product_data["short_description"]=$product->get_short_description('db');
-					}
+					$product_data["description"]=$product->get_description('db');
+					$product_data["short_description"]=$product->get_short_description('db');
+					$product_data["catalog_visibility"]=$product->get_catalog_visibility();//"enableOnlineMenu",
+				}else{
+					$product_data["description"]=$product_data2["description"];
+					$product_data["short_description"]=$product_data2["description"];
+					$product_data["catalog_visibility"]=$product_data2["active"]?"visible":"hidden";//"enableOnlineMenu","enableQrMenu"
 				}
 
 				$result = $this->process_item( $product_data );

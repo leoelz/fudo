@@ -91,6 +91,12 @@ class Fudo_Client
 			}
 	}
 
+	public function get_stock(){
+		if($this->access_token === null)
+			if(!$this->get_access_token())return "";
+		return $this->fetch("/stock/products");
+	}
+
 	public function get_products(){
 		if($this->access_token === null)
 			if(!$this->get_access_token())return "";
