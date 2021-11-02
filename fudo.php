@@ -82,9 +82,14 @@ function run_fudo() {
 run_fudo();
 
 function my_plugin_settings_link($links) {
-	$settings_link = '<a href="admin.php?page=wc-settings&tab=integration&section=fudo">Settings</a>';
+	$settings_link = '<a href="admin.php?page=wc-settings&tab=integration&section=fudo">'.__( 'Settings' ).'</a>';
 	array_unshift($links, $settings_link);
 	return $links;
 }
 $plugin = plugin_basename(__FILE__);
 add_filter("plugin_action_links_$plugin", 'my_plugin_settings_link' );
+
+function wpdocs_load_textdomain() {
+	load_plugin_textdomain( 'wpdocs_textdomain', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'init', 'wpdocs_load_textdomain' );

@@ -13,8 +13,8 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 		public function __construct() {
 			global $woocommerce;
 			$this->id                 = 'fudo';
-			$this->method_title       = __( 'Fudo', 'woocommerce-fudo-integration' );
-			$this->method_description = __( 'Integración de Fudo a WooCommerce.', 'woocommerce-fudo-integration' );
+			$this->method_title       = __( 'Fudo', 'fudo' );
+			$this->method_description = __( 'Fudo to WooCommerce Integration', 'fudo' );
 			// Load the settings.
 			$this->init_form_fields();
 			$this->init_settings();
@@ -35,45 +35,45 @@ if ( ! class_exists( 'Fudo_Integration' ) ) :
 		public function init_form_fields() {
 			$this->form_fields = array(
 				'fudo_client_id' => array(
-					'title'             => __( 'Client Id', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Client Id', 'fudo' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with the Fudo Client Id. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Enter with the Fudo Client Id. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'fudo' ),
 					'desc_tip'          => true
 				),
 				'fudo_client_secret' => array(
-					'title'             => __( 'Client Secret', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Client Secret', 'fudo' ),
 					'type'              => 'text',
-					'description'       => __( 'Enter with the Fudo Client Secret. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Enter with the Fudo Client Secret. You can find this in Fudo Admin Panel, "Aplicaciones Externas".', 'fudo' ),
 					'desc_tip'          => true
 				),
 				'fudo_login' => array(
-					'title'             => __( 'User', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'User', 'fudo' ),
 					'type'              => 'text',
-					'description'       => __( 'If you don\'t have access to API. Enter the Fudo User. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'If you don\'t have access to API. Enter the Fudo User. You can find this in Fudo Admin Panel, "Usuarios".', 'fudo' ),
 					'desc_tip'          => true
 				),
 				'fudo_password' => array(
-					'title'             => __( 'Password', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Password', 'fudo' ),
 					'type'              => 'text',
-					'description'       => __( 'If you don\'t have access to API. Enter the Fudo Password. You can find this in Fudo Admin Panel, "Usuarios".', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'If you don\'t have access to API. Enter the Fudo Password. You can find this in Fudo Admin Panel, "Usuarios".', 'fudo' ),
 					'desc_tip'          => true
 				),
 				'fudo_use_api' => array(
-					'title'             => __( 'Use API', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Use API', 'fudo' ),
 					'type'              => 'checkbox',
-					'description'       => __( 'Disable if you have no access to API yet', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Disable if you have no access to API yet', 'fudo' ),
 					'desc_tip'          => true
 				),
 				'fudo_use_staging' => array(
-					'title'             => __( 'Use Staging', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Use Staging', 'fudo' ),
 					'type'              => 'checkbox',
-					'description'       => __( 'Only if you have access to API', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Only if you have access to API', 'fudo' ),
 					'desc_tip'          => true
 				),
 					'fudo_import_interval_minutes' => array(
-					'title'             => __( 'Import Interval Minutes', 'woocommerce-fudo-integration' ),
+					'title'             => __( 'Import Interval Minutes', 'fudo' ),
 					'type'              => 'text',
-					'description'       => __( 'Interval minutes to run the product importation from Fudo', 'woocommerce-fudo-integration' ),
+					'description'       => __( 'Interval minutes to run the product importation from Fudo', 'fudo' ),
 					'desc_tip'          => true
 				)
 			);

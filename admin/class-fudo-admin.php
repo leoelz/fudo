@@ -103,7 +103,7 @@ class Fudo_Admin {
 	public function add_admin_page() {
 		add_submenu_page(
 			'edit.php?post_type=product',
-			'Integración con Fudo',
+			__('Fudo Integration'),
 			'Fudo',
 			'manage_options',
 			$this->plugin_name,
