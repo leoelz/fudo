@@ -212,5 +212,27 @@ if ( ! class_exists( 'Fudo_Importer' ) ) :
 
 			return $data;
 		}
+        public function remove_old( $hours = 24 ) {
+            $deleted = [];
+            $query_args = [
+                'post_type'=>'product',
+                'post_status'=>'publish',
+                'date_query'=> [
+                    'column' => 'post_modified',
+                    'before' => $hours . ' hours ago'
+                ]
+            ];
+            $query = new WP_Query( $query_args );
+            while ( $query->have_posts() ) {
+                $query->the_post();
+                $post = get_post();
+                wp_update_post([
+                    'ID'=>$post->ID,
+                    'post_status'=>'private'
+                ]);
+                $deleted[] = $post->ID;
+            }
+            return $deleted;
+        }
 	}
 endif;

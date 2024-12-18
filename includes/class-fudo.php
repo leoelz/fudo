@@ -253,8 +253,9 @@ class Fudo {
 	 * A callback to run when the 'fudo_products_importation' scheduled action is run.
 	 */
 	public function import_fudo_products() {
-		$fudoImporter = new Fudo_Importer();
-		error_log(json_encode($fudoImporter->import()));
+		$fudoImporter = new Fudo_Importer;
+        error_log(json_encode($fudoImporter->import()));
+        error_log(json_encode($fudoImporter->remove_old(24)));
 	}
 
 	/**

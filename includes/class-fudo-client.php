@@ -86,7 +86,7 @@ class Fudo_Client
 			if(property_exists($response, 'token'))
 				return $this->access_token = $response->token;
 			else if(property_exists($response,'error')) {
-				echo ($response->error);
+                error_log($response->error);
 				return false;
 			}
 	}
